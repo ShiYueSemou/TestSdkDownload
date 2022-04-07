@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("maven-publish")
 }
 
 android {
@@ -46,6 +47,26 @@ android {
 
     tasks.withType(JavaCompile::class.java) {
         dependsOn("downLoadSdk")
+    }
+}
+
+afterEvaluate {
+    publishing{
+        publications{
+            create("_TestSdkDownload-release_",MavenPublication::class.java){
+                groupId="io.github.JarvisSemou"
+                artifactId="TiAndroidTools"
+                version = "v1.0.0"
+                from(components["release"])
+            }
+
+            create("_TiAndroidTools-debug_",MavenPublication::class.java){
+                groupId="io.github.JarvisSemou"
+                artifactId="TiAndroidTools"
+                version = "v1.0.0-SNAPSHOT"
+                from(components["debug"])
+            }
+        }
     }
 }
 
