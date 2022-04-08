@@ -46,14 +46,14 @@ android {
     }
 
     task<Copy>("copySo"){
-        dependsOn("downLoadSdk")
+        mustRunAfter("downLoadSdk")
         from(zipTree(downloadedSdkFile))
         include("arm*/**")
         into("${project.projectDir}/src/main/jniLibs")
     }
 
     task<Copy>("initSdk") {
-        dependsOn("copySo")
+        mustRunAfter("copySo")
         from(zipTree(downloadedSdkFile))
         include("*.jar")
         into("${project.projectDir}/libs")
