@@ -44,6 +44,8 @@ android {
         overwrite(true)
         onlyIfModified(true)
         doLast {
+            println("start to copy libs")
+
             copy {
                 from(zipTree(downloadedSdkFile))
                 include("arm*/**")
@@ -58,22 +60,6 @@ android {
         }
 
     }
-
-
-//    task<Copy>("copySo"){
-//        dependsOn("downLoadSdk")
-//        from(zipTree(downloadedSdkFile))
-//        include("arm*/**")
-//        into("${project.projectDir}/src/main/jniLibs")
-//    }
-//
-//    task<Copy>("initSdk") {
-//        dependsOn("copySo")
-//        from(zipTree(downloadedSdkFile))
-//        include("*.jar")
-//        into("${project.projectDir}/libs")
-//    }
-
 
 
     tasks.withType(JavaCompile::class.java) {
