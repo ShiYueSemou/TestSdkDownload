@@ -85,15 +85,15 @@ afterEvaluate {
     publishing {
         publications {
             create("_TestSdkDownload-release_", MavenPublication::class.java) {
-                groupId = "io.github.JarvisSemou"
-                artifactId = "TiAndroidTools"
+                groupId = "io.github.ShiYueSemou"
+                artifactId = "TestSdkDownload"
                 version = "v1.0.0"
                 from(components["release"])
             }
 
-            create("_TiAndroidTools-debug_", MavenPublication::class.java) {
-                groupId = "io.github.JarvisSemou"
-                artifactId = "TiAndroidTools"
+            create("_TestSdkDownload-debug_", MavenPublication::class.java) {
+                groupId = "io.github.ShiYueSemou"
+                artifactId = "TestSdkDownload"
                 version = "v1.0.0-SNAPSHOT"
                 from(components["debug"])
             }

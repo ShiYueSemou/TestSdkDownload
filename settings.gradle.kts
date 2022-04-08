@@ -22,3 +22,4 @@ rootProject.name = "TestSdkDownload"
 include(":app")
 include(":testsdkdownload")
 include(":test_download_app")
+include(":showversion")
