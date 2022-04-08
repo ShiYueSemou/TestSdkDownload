@@ -34,35 +34,50 @@ android {
         jvmTarget = "1.8"
     }
 
-    val version = "2.0.8.4"
-    val sdkName = "trtc_engine.zip"
+    val version = "1.0.0"
+    val sdkName = "TPhoneSDKCore.zip"
     val downloadedSdkFile = File("$buildDir/ti-sdk/$sdkName")
 
     task<de.undercouch.gradle.tasks.download.Download>("downLoadSdk") {
-        src("https://tinet-sdk-release.s3.cn-north-1.amazonaws.com.cn/trtc-engine/sdk/android/v$version/$sdkName")
+        src("https://tinet-sdk-release.s3.cn-north-1.amazonaws.com.cn/tphone/sdk_core/android/v1.0.0/TPhoneSDKCore.zip")
         dest(downloadedSdkFile)
         overwrite(true)
         onlyIfModified(true)
+        doLast {
+            copy {
+                from(zipTree(downloadedSdkFile))
+                include("arm*/**")
+                into("${project.projectDir}/src/main/jniLibs")
+            }
+
+            copy{
+                from(zipTree(downloadedSdkFile))
+                include("*.jar")
+                into("${project.projectDir}/libs")
+            }
+        }
+
     }
 
-    task<Copy>("copySo"){
-        mustRunAfter("downLoadSdk")
-        from(zipTree(downloadedSdkFile))
-        include("arm*/**")
-        into("${project.projectDir}/src/main/jniLibs")
-    }
 
-    task<Copy>("initSdk") {
-        mustRunAfter("copySo")
-        from(zipTree(downloadedSdkFile))
-        include("*.jar")
-        into("${project.projectDir}/libs")
-    }
+//    task<Copy>("copySo"){
+//        dependsOn("downLoadSdk")
+//        from(zipTree(downloadedSdkFile))
+//        include("arm*/**")
+//        into("${project.projectDir}/src/main/jniLibs")
+//    }
+//
+//    task<Copy>("initSdk") {
+//        dependsOn("copySo")
+//        from(zipTree(downloadedSdkFile))
+//        include("*.jar")
+//        into("${project.projectDir}/libs")
+//    }
 
 
 
     tasks.withType(JavaCompile::class.java) {
-        dependsOn("initSdk")
+        dependsOn("downLoadSdk")
     }
 }
 
