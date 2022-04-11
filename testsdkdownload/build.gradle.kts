@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.tasks.factory.dependsOn
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -38,8 +40,9 @@ android {
     val sdkName = "TPhoneSDKCore.zip"
     val downloadedSdkFile = File("$buildDir/ti-sdk/$sdkName")
 
-    task<de.undercouch.gradle.tasks.download.Download>("downLoadSdk") {
-        src("https://tinet-sdk-release.s3.cn-north-1.amazonaws.com.cn/tphone/sdk_core/android/v1.0.0/TPhoneSDKCore.zip")
+    task<de.undercouch.gradle.tasks.download.Download>("downloadSdk") {
+        group = "custom"
+        src("https://tinet-sdk-release.s3.cn-north-1.amazonaws.com.cn/tphone/sdk_core/android/v${version}/TPhoneSDKCore.zip")
         dest(downloadedSdkFile)
         overwrite(true)
         onlyIfModified(true)
@@ -48,7 +51,7 @@ android {
 
             copy {
                 from(zipTree(downloadedSdkFile))
-                include("arm*/**")
+                include("arm*/**","x86*/**")
                 into("${project.projectDir}/src/main/jniLibs")
             }
 
@@ -61,27 +64,20 @@ android {
 
     }
 
-
-    tasks.withType(JavaCompile::class.java) {
-        dependsOn("downLoadSdk")
+    tasks.named("preBuild"){
+        dependsOn("downloadSdk")
     }
+
 }
 
 afterEvaluate {
     publishing {
         publications {
             create("_TestSdkDownload-release_", MavenPublication::class.java) {
-                groupId = "io.github.ShiYueSemou"
+                groupId = "com.github.ShiYueSemou"
                 artifactId = "TestSdkDownload"
                 version = "v1.0.0"
                 from(components["release"])
-            }
-
-            create("_TestSdkDownload-debug_", MavenPublication::class.java) {
-                groupId = "io.github.ShiYueSemou"
-                artifactId = "TestSdkDownload"
-                version = "v1.0.0-SNAPSHOT"
-                from(components["debug"])
             }
         }
     }
