@@ -81,9 +81,12 @@ afterEvaluate {
 }
 
 dependencies {
-    println("public ------> find and setting libs")
-    File("${projectDir.path}/libs").list()?.forEach {
-        println("public ------> use libs '$it'")
-        api(files("libs/$it"))
-    }
+    api(
+        fileTree(
+            mapOf(
+                "include" to "*.jar",
+                "dir" to "libs"
+            )
+        )
+    )
 }
