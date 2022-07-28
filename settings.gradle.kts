@@ -11,11 +11,6 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven{url=uri("https://jitpack.io")}
-//        flatDir {
-//            dirs = setOf(
-//                File("./testsdkdownload/libs")
-//            )
-//        }
     }
 }
 rootProject.name = "TestSdkDownload"

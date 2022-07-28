@@ -1,5 +1,3 @@
-import com.android.build.gradle.internal.tasks.factory.dependsOn
-
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -37,12 +35,13 @@ android {
     }
 
     val version = "1.0.0"
-    val sdkName = "TPhoneSDKCore.zip"
-    val downloadedSdkFile = File("$buildDir/ti-sdk/$sdkName")
+    val sdkFile = "xxx.zip"
+    val downloadedSdkFile = File("$buildDir/downloaded_sdk/$sdkFile")
 
     task<de.undercouch.gradle.tasks.download.Download>("downloadSdk") {
         group = "custom"
-        src("https://tinet-sdk-release.s3.cn-north-1.amazonaws.com.cn/tphone/sdk_core/android/v${version}/TPhoneSDKCore.zip")
+        // your url
+        src("https://your.url")
         dest(downloadedSdkFile)
         overwrite(true)
         onlyIfModified(true)
@@ -73,7 +72,7 @@ android {
 afterEvaluate {
     publishing {
         publications {
-            create("_TestSdkDownload-release_", MavenPublication::class.java) {
+            create<MavenPublication>("_TestSdkDownload-release_") {
                 groupId = "com.github.ShiYueSemou"
                 artifactId = "TestSdkDownload"
                 version = "v1.0.0"
@@ -84,12 +83,9 @@ afterEvaluate {
 }
 
 dependencies {
-    api(
-        fileTree(
-            mapOf(
-                "include" to "*.jar",
-                "dir" to "libs"
-            )
-        )
-    )
+    println("public ------> find and setting libs")
+    File("${projectDir.path}/libs").list()?.forEach {
+        println("public ------> use libs '$it'")
+        implementation(files("libs/$it"))
+    }
 }
