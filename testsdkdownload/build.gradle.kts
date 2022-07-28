@@ -71,13 +71,11 @@ android {
 
 afterEvaluate {
     publishing {
-        publications {
-            create<MavenPublication>("_TestSdkDownload-release_") {
-                groupId = "com.github.ShiYueSemou"
-                artifactId = "TestSdkDownload"
-                version = "v1.0.0"
-                from(components["release"])
-            }
+        publications.create<MavenPublication>("_TestSdkDownload-release_") {
+            groupId = "com.github.ShiYueSemou"
+            artifactId = "TestSdkDownload"
+            version = "v1.0.0"
+            from(components["release"])
         }
     }
 }
